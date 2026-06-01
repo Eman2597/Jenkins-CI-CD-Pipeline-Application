@@ -9,8 +9,6 @@ pipeline {
         CONTAINER_PORT = "8081"
         APP_PORT = "3000"
         REGISTRY = "docker.io"  // Change if using private registry
-        // For Docker Hub: REGISTRY_CREDENTIALS_ID = "dockerhub-credentials"
-        // For private registry: REGISTRY = "your-private-registry.com"
     }
 
     options {
@@ -41,7 +39,7 @@ pipeline {
                     echo "========== Building Docker Image =========="
                     try {
                         sh '''
-                            sudo docker build \
+                            docker build \
                                 --tag ${IMAGE_NAME}:${IMAGE_TAG} \
                                 --tag ${IMAGE_NAME}:latest \
                                 --file Dockerfile \
@@ -65,7 +63,7 @@ pipeline {
                         sh '''
                             # Check if image exists
                             echo "Checking if image exists..."
-                            if sudo docker image inspect ${IMAGE_NAME}:${IMAGE_TAG} > /dev/null 2>&1; then
+                            if docker image inspect ${IMAGE_NAME}:${IMAGE_TAG} > /dev/null 2>&1; then
                                 echo " Docker image exists: ${IMAGE_NAME}:${IMAGE_TAG}"
                             else
                                 echo " Docker image not found"
@@ -75,14 +73,14 @@ pipeline {
                             # Run security scan (basic)
                             echo "Running basic security checks..."
                             echo " Image size check:"
-                            sudo docker image inspect ${IMAGE_NAME}:${IMAGE_TAG} | grep -i size || true
+                            docker image inspect ${IMAGE_NAME}:${IMAGE_TAG} | grep -i size || true
 
                             # Test if image can be instantiated
                             echo "Testing if container can be created from image..."
                             TEST_CONTAINER="test-${IMAGE_NAME}-${BUILD_NUMBER}"
-                            sudo docker create --name ${TEST_CONTAINER} ${IMAGE_NAME}:${IMAGE_TAG} > /dev/null 2>&1
+                            docker create --name ${TEST_CONTAINER} ${IMAGE_NAME}:${IMAGE_TAG} > /dev/null 2>&1
                             echo " Container creation test passed"
-                            sudo docker rm ${TEST_CONTAINER} > /dev/null 2>&1
+                            docker rm ${TEST_CONTAINER} > /dev/null 2>&1
 
                             echo " All tests passed"
                         '''
@@ -102,11 +100,11 @@ pipeline {
                         sh '''
                             # Remove old container if exists
                             echo "Cleaning up old containers..."
-                            if sudo docker ps -a --format "table {{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
+                            if docker ps -a --format "table {{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
                                 echo "Stopping old container: ${CONTAINER_NAME}"
-                                sudo docker stop ${CONTAINER_NAME} || true
+                                docker stop ${CONTAINER_NAME} || true
                                 echo "Removing old container: ${CONTAINER_NAME}"
-                                sudo docker rm ${CONTAINER_NAME} || true
+                                docker rm ${CONTAINER_NAME} || true
                                 echo " Old container removed"
                             else
                                 echo " No existing container to remove"
@@ -114,7 +112,7 @@ pipeline {
 
                             # Run new container
                             echo "Starting new container..."
-                            sudo docker run \
+                            docker run \
                                 --name ${CONTAINER_NAME} \
                                 --publish ${CONTAINER_PORT}:${APP_PORT} \
                                 --detach \
@@ -132,7 +130,7 @@ pipeline {
                             # Wait for container to be healthy
                             echo "Waiting for container to be healthy..."
                             for i in {1..30}; do
-                                if sudo docker ps --filter "name=${CONTAINER_NAME}" --format "table {{.Status}}" | grep -q "healthy"; then
+                                if docker ps --filter "name=${CONTAINER_NAME}" --format "table {{.Status}}" | grep -q "healthy"; then
                                     echo " Container is healthy"
                                     break
                                 fi
@@ -145,7 +143,7 @@ pipeline {
                             # Display container info
                             echo ""
                             echo "Container Information:"
-                            sudo docker ps --filter "name=${CONTAINER_NAME}"
+                            docker ps --filter "name=${CONTAINER_NAME}"
                         '''
                     } catch (Exception e) {
                         echo "✗ Deploy stage failed: ${e.message}"
@@ -205,12 +203,11 @@ pipeline {
         failure {
             echo " Pipeline failed. Check the logs above for details."
             script {
-                // Optional: Clean up failed deployment
                 sh '''
-                    if sudo docker ps -a --format "table {{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
+                    if docker ps -a --format "table {{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
                         echo "Cleaning up failed deployment..."
-                        sudo docker stop ${CONTAINER_NAME} || true
-                        sudo docker rm ${CONTAINER_NAME} || true
+                        docker stop ${CONTAINER_NAME} || true
+                        docker rm ${CONTAINER_NAME} || true
                     fi
                 '''
             }

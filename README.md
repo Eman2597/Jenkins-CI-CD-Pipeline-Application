@@ -36,9 +36,8 @@ A complete DevOps project demonstrating a Jenkins CI/CD pipeline for building, t
 
 ```bash
 # Create a new directory
-mkdir hello-world-jenkins-app
-cd hello-world-jenkins-app
-
+mkdir Jenkins-CI-CD-Pipeline-Application
+cd Jenkins-CI-CD-Pipeline-Application
 # Initialize git repository
 git init
 

@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         // Docker image configuration
-        IMAGE_NAME = "CI-CD-Pipeline-App"
+        IMAGE_NAME = "ci-cd-pipeline-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
-        CONTAINER_NAME = "CI-CD-Pipeline-App-container"
+        CONTAINER_NAME = "ci-cd-pipeline-app-container"
         CONTAINER_PORT = "8084"
         APP_PORT = "3000"
         REGISTRY = "docker.io"  // Change if using private registry

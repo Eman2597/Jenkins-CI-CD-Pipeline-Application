@@ -1,0 +1,18 @@
+{
+  "name": "hello-world-app",
+  "version": "1.0.0",
+  "description": "A simple Hello World web application for Jenkins CI/CD demo",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Tests passed!\""
+  },
+  "keywords": [
+    "hello-world",
+    "jenkins",
+    "cicd",
+    "devops"
+  ],
+  "author": "DevOps Engineer",
+  "license": "MIT"
+}

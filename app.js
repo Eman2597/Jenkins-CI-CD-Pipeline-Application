@@ -20,7 +20,7 @@ const server = http.createServer((req, res) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>DevOps Pipeline Dashboard</title>
+        <title>CI-CD Pipeline Dashboard</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex items-center justify-center p-6">
@@ -33,7 +33,7 @@ const server = http.createServer((req, res) => {
                     </span>
                     <span class="text-xs font-semibold text-emerald-100 bg-emerald-700/30 px-2 py-0.5 rounded-full">Live</span>
                 </div>
-                <h1 class="text-2xl font-bold text-white tracking-wide">Hello World Application</h1>
+                <h1 class="text-2xl font-bold text-white tracking-wide">CI-CD-Pipeline-Application</h1>
                 <p class="text-emerald-100 text-sm mt-1 font-medium tracking-wider">Jenkins CI/CD Pipeline Deployed Successfully</p>
             </div>
 
@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                         </div>
                         <div>
-                            <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Docker Container ID</p>
+                            <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Docker Container ID (Hostname)</p>
                             <p class="text-base font-mono font-bold text-slate-200 mt-0.5">${hostname}</p>
                         </div>
                     </div>

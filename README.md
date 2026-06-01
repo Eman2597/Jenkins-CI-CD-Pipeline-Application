@@ -1,10 +1,10 @@
-# Hello World App - Jenkins CI/CD Pipeline
+# CI-CD-Pipeline-Application
 
 A complete DevOps project demonstrating a Jenkins CI/CD pipeline for building, testing, and deploying a Node.js web application in Docker containers.
 
 ## Project Structure
 
-```
+```text
 .
 ├── app.js                 # Node.js application
 ├── package.json          # Node.js dependencies
@@ -12,7 +12,6 @@ A complete DevOps project demonstrating a Jenkins CI/CD pipeline for building, t
 ├── Jenkinsfile           # Jenkins declarative pipeline
 ├── .gitignore            # Git ignore rules
 └── README.md             # This file
-```
 
 ## Prerequisites
 
@@ -24,10 +23,11 @@ A complete DevOps project demonstrating a Jenkins CI/CD pipeline for building, t
 
 ### Jenkins Requirements
 - Jenkins running in Docker container on Windows host
-- Jenkins user with `sudo` privileges (NOPASSWD configured)
+- Docker-in-Docker sidecar container (jenkins-docker) configured
 - Docker installed inside Jenkins container
 - Git plugin installed in Jenkins
 - No additional plugins required (basic Jenkins setup is sufficient)
+
 
 ## Setup Instructions
 
@@ -52,24 +52,24 @@ git config --global user.email "your.email@example.com"
 git add .
 
 # Initial commit
-git commit -m "Initial commit: Add Hello World app with Jenkins pipeline"
+git commit -m "Initial commit: Add  Pipeline with Jenkins pipeline"
 ```
 
 ### Step 2: Push to GitHub
 
 ```bash
 # Create a new repository on GitHub (https://github.com/new)
-# Name it: hello-world-jenkins-app
+# Enter job name: Pipeline-CI-CD-App
 # Do NOT initialize with README, .gitignore, or license
 
 # Add remote and push
-git remote add origin https://github.com/YOUR_USERNAME/hello-world-jenkins-app.git
+git remote add origin https://github.com/YOUR_USERNAME/Jenkins-CI-CD-Pipeline-Application
 git branch -M main
 git push -u origin main
 ```
 
 **Get Your Repository URL:**
-- GitHub Repository: `https://github.com/YOUR_USERNAME/hello-world-jenkins-app`
+- GitHub Repository: `https://github.com/YOUR_USERNAME/Jenkins-CI-CD-Pipeline-Application`
 
 ### Step 3: Configure Jenkins Pipeline Job
 
@@ -77,14 +77,14 @@ git push -u origin main
 
 1. Go to Jenkins Dashboard
 2. Click **"New Item"** (top left)
-3. Enter job name: `Hello-World-CI-CD-Pipeline`
+3. Enter job name: Pipeline-CI-CD-App
 4. Select **"Pipeline"** and click **OK**
 
 #### 3.2 Configure the Pipeline
 
 1. **General Tab:**
    - Check: "GitHub project"
-   - Enter Project URL: `https://github.com/YOUR_USERNAME/hello-world-jenkins-app`
+   - Enter Project URL: `https://github.com/YOUR_USERNAME/Jenkins-CI-CD-Pipeline-Application`
 
 2. **Build Triggers Tab:**
    - Check: "GitHub hook trigger for GITScm polling"
@@ -93,7 +93,7 @@ git push -u origin main
 3. **Pipeline Tab:**
    - **Definition:** Select "Pipeline script from SCM"
    - **SCM:** Select "Git"
-   - **Repository URL:** `https://github.com/YOUR_USERNAME/hello-world-jenkins-app.git`
+   - **Repository URL:** `https://github.com/YOUR_USERNAME/Jenkins-CI-CD-Pipeline-Application`
    - **Credentials:** (optional if public repo)
    - **Branch Specifier:** `*/main`
    - **Script Path:** `Jenkinsfile` (default)
@@ -160,126 +160,20 @@ git push -u origin main
 After successful deployment:
 
 ```
-URL: http://localhost:8081
+URL: http://localhost:8084
 ```
 
 Or from Windows host if Jenkins container is on network:
 ```
-URL: http://jenkins-container-ip:8081
+URL: http://jenkins-container-ip:8084
 ```
 
-You should see a styled "Hello World" page with:
-- Application name
+You should see a styled dashboard page with:
+- CI-CD-Pipeline-Application title
 - Container hostname
 - Current timestamp
 - Node.js version
 
-## Common Commands
-
-### Check Running Container
-
-```bash
-# SSH into Jenkins container first
-docker exec -it jenkins-container-name bash
-
-# List running containers
-sudo docker ps
-
-# View container logs
-sudo docker logs hello-world-app-container
-
-# Access container shell
-sudo docker exec -it hello-world-app-container sh
-```
-
-### Manual Testing (Inside Jenkins Container)
-
-```bash
-# Build image manually
-sudo docker build --tag hello-world-app:test .
-
-# Run container manually
-sudo docker run --name test-container -p 9000:3000 -d hello-world-app:test
-
-# Test endpoint
-curl http://localhost:9000
-
-# Stop container
-sudo docker stop test-container
-sudo docker rm test-container
-```
-
-## Troubleshooting
-
-### Issue: "docker: command not found"
-**Solution:** Docker not installed in Jenkins container or PATH issue
-```bash
-# Inside Jenkins container
-which docker
-docker --version
-```
-
-### Issue: "Permission denied" for docker commands
-**Solution:** Jenkins user needs docker group permissions or sudo access
-```bash
-# Verify sudo works
-sudo docker ps
-# If NOPASSWD is configured, this should work
-```
-
-### Issue: Container fails to start
-**Solution:** Check logs
-```bash
-sudo docker logs hello-world-app-container
-```
-
-### Issue: "Port already in use"
-**Solution:** Another container is using port 8081
-```bash
-# Find process using port
-sudo docker ps | grep 8081
-# Kill the container
-sudo docker stop <container-id>
-```
-
-### Issue: "Cannot reach application"
-**Solution:** Ensure container is healthy
-```bash
-sudo docker ps
-# Check STATUS column - should show "Up ... (healthy)"
-# If not healthy, wait or check logs
-sudo docker logs hello-world-app-container
-```
-
-## Customization
-
-### Change Deployment Port
-Edit `Jenkinsfile` line with:
-```groovy
-CONTAINER_PORT = "8081"
-```
-Change to your desired port (e.g., "8080", "9000")
-
-### Change Application Port
-Edit `app.js` line:
-```javascript
-const port = 3000;
-```
-Also update `Dockerfile` EXPOSE and `Jenkinsfile` APP_PORT
-
-### Use Private Docker Registry
-Edit `Jenkinsfile`:
-```groovy
-REGISTRY = "your-registry.com"
-// And add credentials configuration
-```
-
-### Add More Tests
-Edit `Jenkinsfile` Test stage to add:
-- Unit tests
-- Integration tests
-- Code quality checks
-- Security scanning
 
 ## Project File Descriptions
 
@@ -322,10 +216,10 @@ The Jenkinsfile uses these environment variables:
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `IMAGE_NAME` | `hello-world-app` | Docker image name |
+| `IMAGE_NAME` | `pipleline-CI-CD-app` | Docker image name |
 | `IMAGE_TAG` | `${BUILD_NUMBER}` | Docker image tag (build number) |
-| `CONTAINER_NAME` | `hello-world-app-container` | Running container name |
-| `CONTAINER_PORT` | `8081` | Port exposed on host |
+| `CONTAINER_NAME` | `pipleline-CI-CD-app-container` | Running container name |
+| `CONTAINER_PORT` | `8084` | Port exposed on host |
 | `APP_PORT` | `3000` | Port inside container |
 | `REGISTRY` | `docker.io` | Docker registry |
 
@@ -374,10 +268,7 @@ The Jenkinsfile uses these environment variables:
 - GitHub CI/CD: https://docs.github.com/en/actions
 - Node.js: https://nodejs.org/docs/
 
-## License
-
-MIT
 
 ## Author
 
-DevOps Engineer
+**DevOps Engineer:** Eman

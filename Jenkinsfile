@@ -6,7 +6,7 @@ pipeline {
         IMAGE_NAME = "hello-world-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
         CONTAINER_NAME = "hello-world-app-container"
-        CONTAINER_PORT = "8081"
+        CONTAINER_PORT = "8084"
         APP_PORT = "3000"
         REGISTRY = "docker.io"  // Change if using private registry
     }

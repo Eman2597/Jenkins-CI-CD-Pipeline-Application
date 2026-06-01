@@ -12,6 +12,7 @@ A complete DevOps project demonstrating a Jenkins CI/CD pipeline for building, t
 ├── Jenkinsfile           # Jenkins declarative pipeline
 ├── .gitignore            # Git ignore rules
 └── README.md             # This file
+``` 
 
 ## Prerequisites
 
